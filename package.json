@@ -1,0 +1,23 @@
+{
+  "name": "last-fm-search",
+  "private": true,
+  "version": "1.0.0",
+  "description": "This TypeScript project provides a basic GUI for searching Last.fm for artists, and displays their bio when selected.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stevethedev/last-fm-search.git"
+  },
+  "author": {
+    "name": "Steven Jimenez",
+    "email": "stevenmjimenez@gmail.com"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stevethedev/last-fm-search/issues"
+  },
+  "homepage": "https://github.com/stevethedev/last-fm-search#readme"
+}
