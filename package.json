@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/stevethedev/last-fm-search/issues"
   },
-  "homepage": "https://github.com/stevethedev/last-fm-search#readme"
+  "homepage": "https://github.com/stevethedev/last-fm-search#readme",
+  "devDependencies": {
+    "typescript": "^4.2.4"
+  }
 }
