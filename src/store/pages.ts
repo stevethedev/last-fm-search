@@ -1,4 +1,5 @@
 import { Action } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Artist } from '../api/search';
 import { State } from './state';
 
@@ -37,4 +38,26 @@ export const reducer = (state: State, action: Action): State => {
     return { ...state, currentPage: action.currentPage };
   }
   return state;
+};
+
+export interface Pagination {
+  previousPage: () => void;
+  nextPage: () => void;
+  currentPage: number;
+  setPage: (page: number) => void;
+}
+
+export const usePagination = (): Pagination => {
+  const dispatch = useDispatch();
+  const currentPage = useSelector((s: State) => s.currentPage);
+  const nextPage = () => dispatch(getNextPageAction({ type: 'GET_NEXT_PAGE' }));
+  const previousPage = () => dispatch(getPreviousPageAction({ type: 'GET_PREVIOUS_PAGE' }));
+  const setPage = (page: number) => dispatch(setCurrentPageAction({ type: 'SET_CURRENT_PAGE', currentPage: page }));
+
+  return {
+    currentPage,
+    nextPage,
+    previousPage,
+    setPage,
+  };
 };

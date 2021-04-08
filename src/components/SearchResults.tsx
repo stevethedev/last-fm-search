@@ -1,19 +1,17 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { State } from '../store/state';
 import { repeat } from '../utils';
-import { getNextPageAction, getPreviousPageAction, setCurrentPageAction } from '../store/pages';
+import { usePagination } from '../store/pages';
 import { Artist } from '../api/search';
 
 export const SearchResults = (): JSX.Element => {
   const artists: Artist[] = [{ mbid: 'a' }, { mbid: 'b' }, { mbid: 'c' }] as Artist[];
 
-  const dispatch = useDispatch();
-  const currentPage = useSelector((s: State) => s.currentPage);
-
-  const nextPage = () => dispatch(getNextPageAction({ type: 'GET_NEXT_PAGE' }));
-  const previousPage = () => dispatch(getPreviousPageAction({ type: 'GET_PREVIOUS_PAGE' }));
-  const setPage = (page: number) => dispatch(setCurrentPageAction({ type: 'SET_CURRENT_PAGE', currentPage: page }));
+  const {
+    currentPage,
+    nextPage,
+    previousPage,
+    setPage,
+  } = usePagination();
 
   return (
     <section className="search-results">
