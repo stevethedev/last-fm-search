@@ -5,7 +5,7 @@ import { State } from './state';
 export interface SetPagesAction extends Action<'SET_PAGES'> {
     pages: Artist[][];
 }
-export const isSetPagesAction = (action: Action): action is SetPagesAction => action.type === 'SET_PAGESh';
+export const isSetPagesAction = (action: Action): action is SetPagesAction => action.type === 'SET_PAGES';
 export const setPagesAction = (action: SetPagesAction): SetPagesAction => action;
 
 export interface SetCurrentPageAction extends Action<'SET_CURRENT_PAGE'> {
