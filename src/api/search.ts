@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 
 // Not a good way to store this, but this isn't a production application.
-const API_KEY: string = 'ac4197870e456b0d4b6fddc5c77e8b3f';
+const API_KEY = 'ac4197870e456b0d4b6fddc5c77e8b3f';
 
 // Root URL for the API.
-const API_URL: string = 'http://ws.audioscrobbler.com/2.0/';
+const API_URL = 'http://ws.audioscrobbler.com/2.0/';
 
 export interface SearchParams {
     /**
@@ -57,45 +57,78 @@ export interface Metadata {
 
 export type ImageSize = 'small' | 'medium' | 'large' | 'extralarge' | 'mega';
 
+const parseArtist = (raw: RawArtist): Artist => ({
+  mbid: raw.mbid,
+  name: raw.name,
+  url: raw.url,
+  listeners: Number(raw.listeners),
+  streamable: raw.streamable === '1',
+  images: raw.image.reduce<Artist['images']>((acc, val) => {
+    acc[val.size] = val['#text'];
+    return acc;
+  }, {
+    small: null,
+    medium: null,
+    large: null,
+    extralarge: null,
+    mega: null,
+  }),
+});
+
+const parseMeta = (raw: RawResults): Results['meta'] => {
+  const numResults = Number(raw['opensearch:totalResults']);
+  const page = Number(raw['opensearch:Query'].startPage);
+  const pageLen = Number(raw['opensearch:itemsPerPage']);
+  const pageCount = Math.ceil(numResults / pageLen);
+
+  return {
+    numResults, page, pageLen, pageCount,
+  };
+};
+
+const parseResults = (results: RawResults): Results => ({
+  artists: results.artistmatches.artist.map(parseArtist),
+  meta: parseMeta(results),
+});
+
+const joinToString = (parameters: ApiParameters): string => Object.keys(parameters).map((name) => `${name}=${parameters[name]}`).join('&');
+
 /**
  * Execute an anonymous search against the API
  */
 export async function search(params: SearchParams): Promise<Results | null> {
-    const parameters: ApiParameters = {
-        method: 'artist.search',
-        api_key: API_KEY,
-        artist: params.artist,
-        format: 'json'
-    };
+  const parameters: ApiParameters = {
+    method: 'artist.search',
+    api_key: API_KEY,
+    artist: params.artist,
+    format: 'json',
+  };
 
-    if (params.limit) {
-        parameters.limit = `${params.limit}`;
-    }
+  if (params.limit) {
+    parameters.limit = `${params.limit}`;
+  }
 
-    if (params.page) {
-        parameters.page = `${params.page}`;
-    }
+  if (params.page) {
+    parameters.page = `${params.page}`;
+  }
 
-    const response = await axios.get(`${API_URL}?${joinToString(parameters)}`, {responseType: 'json'});
+  const response = await axios.get(`${API_URL}?${joinToString(parameters)}`, { responseType: 'json' });
 
-    const results: unknown = response?.data?.results;
-    if (!results) {
-        return null;
-    }
+  const results: unknown = response?.data?.results;
+  if (!results) {
+    return null;
+  }
 
-    // Normally I'd do a better job of type-checking this.
-    return parseResults(results as RawResults);
+  // Normally I'd do a better job of type-checking this.
+  return parseResults(results as RawResults);
 }
 
 interface ApiParameters {
     method: string;
+    // eslint-disable-next-line camelcase
     api_key: string;
 
     [key: string]: string;
-}
-
-function joinToString(parameters: ApiParameters): string {
-    return Object.keys(parameters).map(name => `${name}=${parameters[name]}`).join('&');
 }
 
 interface RawImage {
@@ -125,40 +158,4 @@ interface RawResults {
     'opensearch:itemsPerPage': string;
     'opensearch:startIndex': string;
     'opensearch:totalResults': string;
-}
-
-function parseResults(results: RawResults): Results {
-    return {
-        artists: results.artistmatches.artist.map(parseArtist),
-        meta: parseMeta(results)
-    }
-}
-
-function parseArtist(raw: RawArtist): Artist {
-    return {
-        mbid: raw.mbid,
-        name: raw.name,
-        url: raw.url,
-        listeners: Number(raw.listeners),
-        streamable: raw.streamable === '1',
-        images: raw.image.reduce<Artist['images']>((acc, val) => {
-            acc[val.size] = val["#text"];
-            return acc;
-        }, {
-            small: null,
-            medium: null,
-            large: null,
-            extralarge: null,
-            mega: null
-        })
-    };
-}
-
-function parseMeta(raw: RawResults): Results['meta'] {
-    const numResults = Number(raw['opensearch:totalResults']);
-    const page = Number(raw['opensearch:Query'].startPage);
-    const pageLen = Number(raw['opensearch:itemsPerPage']);
-    const pageCount = Math.ceil(numResults / pageLen);
-
-    return {numResults, page, pageLen, pageCount};
 }

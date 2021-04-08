@@ -1,3 +1,3 @@
-it('runs the test', function() {
-    expect(true).toBeTruthy();
+it('runs the test', () => {
+  expect(true).toBeTruthy();
 });

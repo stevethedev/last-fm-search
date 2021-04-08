@@ -1,7 +1,7 @@
-import {getInitialState, State} from "./state";
-import {Action} from "redux";
-import {reducer as pageReducer} from "./pages";
+import { Action } from 'redux';
+import { getInitialState, State } from './state';
+import { reducer as pageReducer } from './pages';
 
-export const reducer = (state = getInitialState(), action: Action): State => {
-    return pageReducer(state, action);
-}
+const reducer = (state = getInitialState(), action: Action): State => pageReducer(state, action);
+
+export { reducer };

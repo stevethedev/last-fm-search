@@ -1,15 +1,15 @@
 import React from 'react';
-import {reducer} from "../store/reducer";
-import {Provider} from "react-redux";
-import {Search} from "./Search";
-import {createStore} from "redux";
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import { reducer } from '../store/reducer';
+import { Search } from './Search';
 
-export const App = () => {
-    const store = createStore(reducer);
+export default (): JSX.Element => {
+  const store = createStore(reducer);
 
-    return (
-        <Provider store={store}>
-            <Search />
-        </Provider>
-    );
+  return (
+    <Provider store={store}>
+      <Search />
+    </Provider>
+  );
 };

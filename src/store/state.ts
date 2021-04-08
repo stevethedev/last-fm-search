@@ -1,4 +1,4 @@
-import {Artist} from "../api/search";
+import { Artist } from '../api/search';
 
 export interface State {
     pages: Artist[][];
@@ -7,7 +7,7 @@ export interface State {
 }
 
 export const getInitialState = (): State => ({
-    pages: [],
-    currentPage: 1,
-    maxPages: 0
-})
+  pages: [],
+  currentPage: 1,
+  maxPages: 0,
+});
