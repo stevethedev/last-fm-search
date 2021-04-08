@@ -3,9 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  ignorePatterns: [
-    'webpack.config.js',
-  ],
+  ignorePatterns: ['webpack.config.js'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -23,11 +21,9 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: [
-    'react',
-    '@typescript-eslint',
-  ],
+  plugins: ['react', '@typescript-eslint'],
   rules: {
+    'prettier/prettier': 'off',
     'no-void': 'off',
     'import/prefer-default-export': 'off',
     'no-use-before-define': 'off',
@@ -41,17 +37,18 @@ module.exports = {
         jsx: 'never',
         ts: 'never',
         tsx: 'never',
+        'module.css': 'never',
       },
     ],
   },
   settings: {
-    'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
+    'import/extensions': ['.js', '.jsx', '.ts', '.tsx', 'module.css'],
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
     },
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx', 'module.css'],
       },
     },
   },

@@ -16,14 +16,23 @@ module.exports = (env, argv) => {
         {
           test: /\.tsx?$/,
           exclude: /node_modules/,
-          use: {
-            loader: 'ts-loader',
-          },
+          use: { loader: 'ts-loader' },
         },
+        {
+          test: /\.css$/,
+          use: [
+            { loader: 'style-loader' },
+            {
+              loader: "css-loader",
+              options: { modules: true }
+            },
+            { loader: '@teamsupercell/typings-for-css-modules-loader' },
+          ]
+        }
       ],
     },
     resolve: {
-      extensions: ['.ts', '.tsx', '.js'],
+      extensions: ['.ts', '.tsx', '.js', '.css'],
     },
   };
 };

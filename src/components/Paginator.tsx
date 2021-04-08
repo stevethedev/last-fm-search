@@ -1,7 +1,8 @@
 import React from 'react';
-import { bound, range } from '../utils';
+import { bound, flattenStyles, range } from '../utils';
+import styles from './Paginator.module.css';
 
-interface PaginatorParams {
+interface PaginatorParams extends React.HTMLProps<HTMLElement> {
   start: number;
   end: number;
   current: number;
@@ -10,21 +11,26 @@ interface PaginatorParams {
   onSelectPage: (page: number) => void;
 }
 
-interface ButtonParams {target: number;
-content: JSX.Element | string | number;
-current: number;
-onSelectPage: (page: number) => void}
+interface ButtonParams extends React.HTMLProps<HTMLButtonElement> {
+  index: number;
+  current: number;
+  onSelectPage: (page: number) => void;
+}
 
 const PaginatorButton = ({
-  target, onSelectPage, content, current,
+  index, onSelectPage, current, ...rest
 }: ButtonParams) => (
   <button
     type="button"
-    className={`paginator-button ${target === current ? 'paginator-button--selected' : ''}`}
-    onClick={() => onSelectPage?.(target)}
-    onKeyPress={() => onSelectPage?.(target)}
+    className={flattenStyles({
+      [styles['paginator-button']]: true,
+      [rest.className ?? '']: rest.className?.length !== 0,
+      [styles['paginator-button--selected']]: index === current,
+    })}
+    onClick={() => onSelectPage?.(index)}
+    onKeyPress={() => onSelectPage?.(index)}
   >
-    {content}
+    {rest.content}
   </button>
 );
 
@@ -38,19 +44,19 @@ export const Paginator = ({
   const last = bound(first + count, 1, end);
 
   const buttons = range(first, last).map((i) => (
-    <PaginatorButton key={i} target={i} content={i} onSelectPage={onSelectPage} current={current} />
+    <PaginatorButton key={i} index={i} content={`${i}`} onSelectPage={onSelectPage} current={current} />
   ));
 
   const previous = current === start
     ? <></>
-    : <PaginatorButton onSelectPage={onSelectPage} target={current - 1} content="Previous" current={current} />;
+    : <PaginatorButton onSelectPage={onSelectPage} index={current - 1} content="Previous" current={current} />;
 
   const next = current >= end
     ? <></>
-    : <PaginatorButton onSelectPage={onSelectPage} target={current + 1} content="Next" current={current} />;
+    : <PaginatorButton onSelectPage={onSelectPage} index={current + 1} content="Next" current={current} />;
 
   return (
-    <section className="paginator">
+    <section className={styles.paginator}>
       {previous}
       {buttons}
       {next}

@@ -1,0 +1,14 @@
+.search {
+    height: 100%;
+}
+
+.search__search-bar {
+}
+
+.search__search-results {
+    flex: 1;
+}
+
+.search__search-result {
+
+}

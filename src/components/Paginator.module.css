@@ -1,0 +1,15 @@
+.paginator {
+    display: flex;
+    justify-content: center;
+}
+
+.paginator-button {
+    font-weight: normal;
+    background-color: transparent;
+    border: none;
+}
+
+.paginator-button--selected {
+    font-weight: bold;
+    color: var(--color-accent);
+}

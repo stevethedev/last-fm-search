@@ -1,34 +1,35 @@
 import React from 'react';
 import { Artist } from '../api/search';
+import styles from './SearchResultList.module.css';
 
-export interface Params {
+export interface Params extends React.HTMLProps<HTMLElement> {
   page: Artist[];
-  onSelect: (artist: Artist) => void;
+  onPageSelected: (artist: Artist) => void;
 }
 
-interface ItemParams {
+interface ItemParams extends React.HTMLProps<HTMLElement> {
   artist: Artist;
-  onClick: (artist: Artist) => void;
+  onPageSelected: (artist: Artist) => void;
 }
 
-const SearchResultListItem = ({ artist, onClick }: ItemParams): JSX.Element => (
+const SearchResultListItem = ({ artist, onPageSelected, ...rest }: ItemParams): JSX.Element => (
   <div
     role="button"
     tabIndex={0}
-    className="search-results__list-item"
-    onClick={() => onClick(artist)}
-    onKeyPress={(event) => (event.key === 'Enter' ? onClick(artist) : null)}
+    className={`${styles['search-result-item']} ${rest.className ?? ''}`}
+    onClick={() => onPageSelected(artist)}
+    onKeyPress={(event) => (event.key === 'Enter' ? onPageSelected(artist) : null)}
   >
     {artist.name}
   </div>
 );
 
-export const SearchResultList = ({ page, onSelect }: Params): JSX.Element => {
+export const SearchResultList = ({ page, onPageSelected, ...rest }: Params): JSX.Element => {
   const items = page.map((artist) => (
-    <SearchResultListItem artist={artist} key={artist.url} onClick={onSelect} />));
+    <SearchResultListItem className={styles['search-result-list__item']} artist={artist} key={artist.url} onPageSelected={onPageSelected} />));
 
   return (
-    <section className="search-results__list">
+    <section className={`${styles['search-result-list']} ${rest.className ?? ''}`}>
       {items}
     </section>
   );

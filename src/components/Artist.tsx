@@ -1,17 +1,18 @@
 import React from 'react';
 import { Artist } from '../api/search';
+import styles from './Artist.module.css';
 
-interface Params {
+interface Params extends React.HTMLProps<HTMLElement> {
   artist: Artist;
 }
 
-export const ArtistArticle = ({ artist }: Params): JSX.Element => (
-  <article className="artist-article">
-    <header className="artist-article__header">
+export const ArtistArticle = ({ artist, ...rest }: Params): JSX.Element => (
+  <article className={`${styles['artist-article']} ${rest.className ?? ''}`}>
+    <header className={styles['artist-article__header']}>
       <img src={artist.images.medium ?? ''} alt={artist.name} />
       <span>{artist.name}</span>
     </header>
-    <section className="artist-article__body">
+    <section className={styles['artist-article__body']}>
       <span>
         {artist.listeners}
         {' '}

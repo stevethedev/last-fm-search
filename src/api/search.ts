@@ -102,15 +102,9 @@ export async function search(params: SearchParams): Promise<Results | null> {
     api_key: API_KEY,
     artist: params.artist,
     format: 'json',
+    limit: `${params.limit ?? 10}`,
+    page: `${params.page ?? 1}`,
   };
-
-  if (params.limit) {
-    parameters.limit = `${params.limit}`;
-  }
-
-  if (params.page) {
-    parameters.page = `${params.page}`;
-  }
 
   const response = await axios.get(`${API_URL}?${joinToString(parameters)}`, { responseType: 'json' });
 

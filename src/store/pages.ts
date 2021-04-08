@@ -24,18 +24,6 @@ export const useSetCurrentPageDispatcher = (): ((currentPage: State['currentPage
   };
 };
 
-export const useGetNextPageDispatcher = (): (() => void) => {
-  const setCurrentPage = useSetCurrentPageDispatcher();
-  const currentPage = useCurrentPageNumberSelector();
-  return () => setCurrentPage(currentPage + 1);
-};
-
-export const useGetPreviousPageDispatcher = (): (() => void) => {
-  const setCurrentPage = useSetCurrentPageDispatcher();
-  const currentPage = useCurrentPageNumberSelector();
-  return () => setCurrentPage(currentPage - 1);
-};
-
 export const useSetMaxPagesDispatcher = (): ((maxPages: State['maxPages']) => void) => {
   const dispatch = useDispatch();
   return (maxPages) => dispatch(action<SetMaxPagesAction>({ type: 'SET_MAX_PAGES', maxPages }));

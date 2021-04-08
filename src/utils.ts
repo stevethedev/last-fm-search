@@ -20,3 +20,7 @@ export const range = (start: number, end: number): number[] => (
     ? []
     : repeat(end - start, (i) => i + start)
 );
+
+export const flattenStyles = (obj: { [key: string]: boolean }): string => (
+  Object.keys(obj).filter((key) => obj[key]).join(' ')
+);

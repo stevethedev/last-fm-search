@@ -10,8 +10,11 @@ import { useSearchTextSelector, useSubmitSearchDispatcher } from '../store/searc
 import { SearchResultList } from './SearchResultList';
 import { Paginator } from './Paginator';
 import { useSetSelectedArtistDispatcher } from '../store/artist';
+import styles from './SearchResults.module.css';
 
-export const SearchResults = (): JSX.Element => {
+type Props = React.HTMLProps<HTMLElement>
+
+export const SearchResults = ({ ...rest }: Props): JSX.Element => {
   const currentPage = useCurrentPageSelector();
   const currentPageNumber = useCurrentPageNumberSelector();
   const setPageDispatcher = useSetCurrentPageDispatcher();
@@ -29,9 +32,10 @@ export const SearchResults = (): JSX.Element => {
   };
 
   return (
-    <section className="search-results">
-      <SearchResultList page={currentPage} onSelect={setSelectedArtist} />
+    <section className={`${styles['search-results']} ${rest.className}`}>
+      <SearchResultList className={styles['search-results__list']} page={currentPage} onPageSelected={setSelectedArtist} />
       <Paginator
+        className={styles['search-results__result']}
         start={1}
         end={maxPages}
         current={currentPageNumber}

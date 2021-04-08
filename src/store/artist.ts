@@ -16,6 +16,11 @@ export const useSetSelectedArtistDispatcher = (): ((artist: State['artist']) => 
   return (artist) => dispatch(action<SetSelectedArtistAction>({ type: 'SET_SELECTED_ARTIST', artist }));
 };
 
+export const useClearSelectedArtistDispatcher = (): (() => void) => {
+  const setSelectedArtist = useSetSelectedArtistDispatcher();
+  return () => setSelectedArtist(null);
+};
+
 reducers.push((state: State, a: Action): State => {
   if (isAction<SetSelectedArtistAction>(a, 'SET_SELECTED_ARTIST')) {
     return { ...state, artist: a.artist };
