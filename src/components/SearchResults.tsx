@@ -9,6 +9,7 @@ import {
 import { useSearchTextSelector, useSubmitSearchDispatcher } from '../store/search';
 import { SearchResultList } from './SearchResultList';
 import { Paginator } from './Paginator';
+import { useSetSelectedArtistDispatcher } from '../store/artist';
 
 export const SearchResults = (): JSX.Element => {
   const currentPage = useCurrentPageSelector();
@@ -18,6 +19,7 @@ export const SearchResults = (): JSX.Element => {
   const pages = usePagesSelector();
   const maxPages = useMaxPagesSelector();
   const artistName = useSearchTextSelector();
+  const setSelectedArtist = useSetSelectedArtistDispatcher();
 
   const onSelectPage = async (n: number) => {
     setPageDispatcher(n);
@@ -28,7 +30,7 @@ export const SearchResults = (): JSX.Element => {
 
   return (
     <section className="search-results">
-      <SearchResultList page={currentPage} />
+      <SearchResultList page={currentPage} onSelect={setSelectedArtist} />
       <Paginator
         start={1}
         end={maxPages}
