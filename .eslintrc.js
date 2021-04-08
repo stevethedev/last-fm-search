@@ -3,6 +3,9 @@ module.exports = {
     browser: true,
     es2021: true,
   },
+  ignorePatterns: [
+    'webpack.config.js',
+  ],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -25,6 +28,7 @@ module.exports = {
     '@typescript-eslint',
   ],
   rules: {
+    'no-void': 'off',
     'import/prefer-default-export': 'off',
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],

@@ -1,13 +1,24 @@
+import { useSelector } from 'react-redux';
 import { Artist } from '../api/search';
 
+export interface Pages {
+  [index: number]: Artist[];
+}
+
 export interface State {
-    pages: Artist[][];
-    currentPage: number;
+    pages: Pages;
+    currentPageNumber: number;
     maxPages: number;
+
+    searchText: string | null;
 }
 
 export const getInitialState = (): State => ({
-  pages: [],
-  currentPage: 1,
+  pages: Object.create(null),
+  currentPageNumber: 1,
   maxPages: 0,
+
+  searchText: null,
 });
+
+export const useStateSelector = (): State => useSelector((s: State) => s);
