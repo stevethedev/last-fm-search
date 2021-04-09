@@ -9,8 +9,9 @@ import {
 import { useSearchTextSelector, useSubmitSearchDispatcher } from '../store/search';
 import { SearchResultList } from './SearchResultList';
 import { Paginator } from './Paginator';
-import { useSetSelectedArtistDispatcher } from '../store/artist';
+import { useGetArtistDetailsDispatcher, useSetSelectedArtistDispatcher } from '../store/artist';
 import styles from './SearchResults.module.css';
+import { Artist } from '../api/search';
 
 type Props = React.HTMLProps<HTMLElement>
 
@@ -23,6 +24,7 @@ export const SearchResults = ({ ...rest }: Props): JSX.Element => {
   const maxPages = useMaxPagesSelector();
   const artistName = useSearchTextSelector();
   const setSelectedArtist = useSetSelectedArtistDispatcher();
+  const getArtistDetails = useGetArtistDetailsDispatcher();
 
   const onSelectPage = async (n: number) => {
     setPageDispatcher(n);
@@ -31,9 +33,14 @@ export const SearchResults = ({ ...rest }: Props): JSX.Element => {
     }
   };
 
+  const selectArtist = async (artist: Artist) => {
+    setSelectedArtist(artist);
+    await getArtistDetails(artist);
+  };
+
   return (
     <section className={`${styles['search-results']} ${rest.className}`}>
-      <SearchResultList className={styles['search-results__list']} page={currentPage} onPageSelected={setSelectedArtist} />
+      <SearchResultList className={styles['search-results__list']} page={currentPage} onPageSelected={selectArtist} />
       <Paginator
         className={styles['search-results__result']}
         start={1}

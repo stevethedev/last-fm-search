@@ -1,10 +1,4 @@
-import axios from 'axios';
-
-// Not a good way to store this, but this isn't a production application.
-const API_KEY = 'ac4197870e456b0d4b6fddc5c77e8b3f';
-
-// Root URL for the API.
-const API_URL = 'http://ws.audioscrobbler.com/2.0/';
+import { httpGet } from './request';
 
 export interface SearchParams {
     /**
@@ -56,6 +50,16 @@ export interface Metadata {
 }
 
 export type ImageSize = 'small' | 'medium' | 'large' | 'extralarge' | 'mega';
+export const parseImages = (rawImages: RawImage[]): Record<ImageSize, string | null> => rawImages.reduce<Artist['images']>((acc, val) => {
+  acc[val.size] = val['#text'];
+  return acc;
+}, {
+  small: null,
+  medium: null,
+  large: null,
+  extralarge: null,
+  mega: null,
+});
 
 const parseArtist = (raw: RawArtist): Artist => ({
   mbid: raw.mbid,
@@ -63,16 +67,7 @@ const parseArtist = (raw: RawArtist): Artist => ({
   url: raw.url,
   listeners: Number(raw.listeners),
   streamable: raw.streamable === '1',
-  images: raw.image.reduce<Artist['images']>((acc, val) => {
-    acc[val.size] = val['#text'];
-    return acc;
-  }, {
-    small: null,
-    medium: null,
-    large: null,
-    extralarge: null,
-    mega: null,
-  }),
+  images: parseImages(raw.image),
 });
 
 const parseMeta = (raw: RawResults): Results['meta'] => {
@@ -91,38 +86,18 @@ const parseResults = (results: RawResults): Results => ({
   meta: parseMeta(results),
 });
 
-const joinToString = (parameters: ApiParameters): string => Object.keys(parameters).map((name) => `${name}=${parameters[name]}`).join('&');
-
 /**
  * Execute an anonymous search against the API
  */
 export async function search(params: SearchParams): Promise<Results | null> {
-  const parameters: ApiParameters = {
+  const data = await httpGet({
     method: 'artist.search',
-    api_key: API_KEY,
     artist: params.artist,
-    format: 'json',
-    limit: `${params.limit ?? 10}`,
-    page: `${params.page ?? 1}`,
-  };
-
-  const response = await axios.get(`${API_URL}?${joinToString(parameters)}`, { responseType: 'json' });
-
-  const results: unknown = response?.data?.results;
-  if (!results) {
-    return null;
-  }
+  });
 
   // Normally I'd do a better job of type-checking this.
-  return parseResults(results as RawResults);
-}
-
-interface ApiParameters {
-    method: string;
-    // eslint-disable-next-line camelcase
-    api_key: string;
-
-    [key: string]: string;
+  const results = (data as { results?: RawResults } | null)?.results;
+  return results ? parseResults(results) : null;
 }
 
 interface RawImage {
