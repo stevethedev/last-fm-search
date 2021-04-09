@@ -19,6 +19,7 @@
 
 .artist-details__biography {
     margin-top: 1em;
+    white-space: pre-wrap;
 }
 
 .artist-header__image {
