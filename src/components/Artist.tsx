@@ -1,4 +1,5 @@
 import React from 'react';
+import { format } from 'date-fns';
 import styles from './Artist.module.css';
 import { ArtistDetails } from '../api/artist';
 
@@ -7,14 +8,16 @@ interface Params extends React.HTMLProps<HTMLElement> {
 }
 
 const ArtistDetails = ({ artist, ...rest }: Params): JSX.Element => (
-  <section className={`${styles['artist-details']}${rest.className ?? ''}`}>
+  <section className={`${styles['artist-details']} ${rest.className ?? ''}`}>
     {!artist.bio ? <></> : (
       <>
         <div className={styles['artist-details__publish-date']}>
           Published
-          {artist.bio.published.toString()}
+          {' '}
+          {format(artist.bio.published, 'PP \' at \' p')}
         </div>
-        <div className={styles['artist-details__biography']}>{artist.bio.content}</div>
+        {/* eslint-disable-next-line react/no-danger */}
+        <div className={styles['artist-details__biography']} dangerouslySetInnerHTML={{ __html: artist.bio.content }} />
       </>
     )}
   </section>
@@ -22,13 +25,15 @@ const ArtistDetails = ({ artist, ...rest }: Params): JSX.Element => (
 
 const ArtistHeader = ({ artist, ...rest }: Params): JSX.Element => (
   <header className={`${styles['artist-header']} ${rest.className ?? ''}`}>
-    <img src={artist.images.large ?? ''} alt={artist.name} />
-    <span>{artist.name}</span>
-    <span>
-      {artist.listeners}
-      {' '}
-      Listeners
-    </span>
+    <img className={styles['artist-header__image']} src={artist.images.large ?? ''} alt={artist.name} />
+    <div className={styles['artist-header__text']}>
+      <span className={styles['artist-header__name']}>{artist.name}</span>
+      <span className={styles['artist-header__listeners']}>
+        {artist.listeners}
+        {' '}
+        Listeners
+      </span>
+    </div>
   </header>
 );
 

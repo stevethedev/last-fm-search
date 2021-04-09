@@ -1,13 +1,38 @@
 .artist-article {}
 
-.artist-article__header {}
+.artist-article__header {
+    display: flex;
+    align-items: center;
+}
 
-.artist-article__body {}
+.artist-article__body {
+    margin-top: 1em;
+}
 
 .artist-header {}
 
 .artist-details {}
 
-.artist-details__publish-date {}
+.artist-details__publish-date {
+    font-size: small;
+}
 
-.artist-details__biography {}
+.artist-details__biography {
+    margin-top: 1em;
+}
+
+.artist-header__image {
+    height: 4em;
+}
+
+.artist-header__text {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1em;
+}
+
+.artist-header__name {
+    font-weight: bold;
+}
+
+.artist-header__listeners {}
