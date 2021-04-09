@@ -25,11 +25,15 @@ const ArtistDetails = ({ artist, ...rest }: Params): JSX.Element => (
 
 const ArtistHeader = ({ artist, ...rest }: Params): JSX.Element => (
   <header className={`${styles['artist-header']} ${rest.className ?? ''}`}>
-    <img className={styles['artist-header__image']} src={artist.images.large ?? ''} alt={artist.name} />
+    <img
+      className={styles['artist-header__image']}
+      src={artist.images.large ?? ''}
+      alt={artist.name}
+    />
     <div className={styles['artist-header__text']}>
       <span className={styles['artist-header__name']}>{artist.name}</span>
       <span className={styles['artist-header__listeners']}>
-        {artist.listeners}
+        {artist.listeners.toLocaleString()}
         {' '}
         Listeners
       </span>
@@ -39,7 +43,13 @@ const ArtistHeader = ({ artist, ...rest }: Params): JSX.Element => (
 
 export const ArtistArticle = ({ artist, ...rest }: Params): JSX.Element => (
   <article className={`${styles['artist-article']} ${rest.className ?? ''}`}>
-    <ArtistHeader className={styles['artist-article__header']} artist={artist} />
-    <ArtistDetails className={styles['artist-article__body']} artist={artist} />
+    <ArtistHeader
+      className={styles['artist-article__header']}
+      artist={artist}
+    />
+    <ArtistDetails
+      className={styles['artist-article__body']}
+      artist={artist}
+    />
   </article>
 );

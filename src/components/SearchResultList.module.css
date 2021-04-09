@@ -1,6 +1,11 @@
 .search-result-list {}
 
-.search-result-list__item {}
+.search-result-list__item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 1;
+}
 
 .search-result-list__item:hover {
     background-color: var(--color-gray-opaque);
@@ -10,4 +15,9 @@
 .search-result-item {
     padding: 0.5em;
     cursor: default;
+}
+
+.search-result-item__text {
+    flex: 1;
+    margin-left: 0.5em;
 }

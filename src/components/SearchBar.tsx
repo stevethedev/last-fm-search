@@ -26,8 +26,21 @@ export const SearchBar = ({ ...rest }: Props): JSX.Element => {
 
   return (
     <div className={`${styles['search-bar']} ${rest.className ?? ''}`}>
-      <input className={styles['search-bar__input']} id="search" type="text" value={artist} onKeyPress={onKeyPress} onChange={onChange} />
-      <button type="button" className={styles['search-bar__button']} onClick={submitSearch}>Go</button>
+      <input
+        className={styles['search-bar__input']}
+        id="search"
+        type="text"
+        value={artist}
+        onKeyPress={onKeyPress}
+        onChange={onChange}
+      />
+      <button
+        type="button"
+        className={styles['search-bar__button']}
+        onClick={submitSearch}
+      >
+        Go
+      </button>
     </div>
   );
 };

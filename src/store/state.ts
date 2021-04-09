@@ -11,6 +11,7 @@ export interface State {
     maxPages: number;
 
     searchText: string | null;
+    resultCount: number;
 
     artist: Artist | null;
 }
@@ -21,6 +22,7 @@ export const getInitialState = (): State => ({
   maxPages: 0,
 
   searchText: null,
+  resultCount: 0,
 
   artist: null,
 });

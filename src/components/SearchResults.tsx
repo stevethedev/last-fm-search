@@ -3,7 +3,6 @@ import {
   useCurrentPageNumberSelector,
   useCurrentPageSelector,
   useMaxPagesSelector,
-  usePagesSelector,
   useSetCurrentPageDispatcher,
 } from '../store/pages';
 import { useSearchTextSelector, useSubmitSearchDispatcher } from '../store/search';
@@ -20,7 +19,6 @@ export const SearchResults = ({ ...rest }: Props): JSX.Element => {
   const currentPageNumber = useCurrentPageNumberSelector();
   const setPageDispatcher = useSetCurrentPageDispatcher();
   const submitSearch = useSubmitSearchDispatcher();
-  const pages = usePagesSelector();
   const maxPages = useMaxPagesSelector();
   const artistName = useSearchTextSelector();
   const setSelectedArtist = useSetSelectedArtistDispatcher();
@@ -28,8 +26,8 @@ export const SearchResults = ({ ...rest }: Props): JSX.Element => {
 
   const onSelectPage = async (n: number) => {
     setPageDispatcher(n);
-    if (artistName && !pages[currentPageNumber]) {
-      await submitSearch({ artist: artistName, page: currentPageNumber });
+    if (artistName) {
+      await submitSearch({ artist: artistName, page: n });
     }
   };
 

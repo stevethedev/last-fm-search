@@ -3,12 +3,30 @@
 }
 
 .search__search-bar {
+    max-width: 500px;
+    align-self: center;
+    width: 100%;
+}
+
+.search__top {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
 }
 
 .search__search-results {
     flex: 1;
+    margin-top: 1em;
 }
 
 .search__search-result {
     margin-top: 1em;
+}
+
+.search__result-count {
+    margin-left: 1em;
+    margin-top: 0.3em;
+    font-size: small;
+    font-style: italic;
 }

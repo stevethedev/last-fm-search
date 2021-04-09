@@ -10,14 +10,24 @@ import {
 import { search, SearchParams } from '../api/search';
 
 interface SetSearchParametersAction extends Action<'SET_SEARCH_PARAMS'> {
-  searchText: string | null;
+  searchText: State['searchText'];
+}
+
+interface SetResultCountAction extends Action<'SET_SEARCH_RESULT_COUNT'> {
+  resultCount: State['resultCount'];
 }
 
 export const useSearchTextSelector = (): State['searchText'] => useSelector((state: State) => state.searchText);
+export const useSearchResultCountSelector = (): State['resultCount'] => useSelector((state: State) => state.resultCount);
 
 export const useSetSearchParametersDispatcher = (): ((query: SearchParams) => void) => {
   const dispatch = useDispatch();
-  return (query: SearchParams) => dispatch(action<SetSearchParametersAction>({ type: 'SET_SEARCH_PARAMS', searchText: query.artist }));
+  return (query) => dispatch(action<SetSearchParametersAction>({ type: 'SET_SEARCH_PARAMS', searchText: query.artist }));
+};
+
+export const useSetSearchResultCountDispatcher = (): ((resultCount: State['resultCount']) => void) => {
+  const dispatch = useDispatch();
+  return (resultCount) => dispatch(action<SetResultCountAction>({ type: 'SET_SEARCH_RESULT_COUNT', resultCount }));
 };
 
 export const useSubmitSearchDispatcher = (): ((query: SearchParams) => Promise<void>) => {
@@ -26,6 +36,7 @@ export const useSubmitSearchDispatcher = (): ((query: SearchParams) => Promise<v
   const setSearchParams = useSetSearchParametersDispatcher();
   const setMaxPages = useSetMaxPagesDispatcher();
   const putPages = usePutPageDispatcher();
+  const setSearchResultCount = useSetSearchResultCountDispatcher();
 
   return async (query) => {
     if (state.searchText !== query.artist) {
@@ -34,15 +45,12 @@ export const useSubmitSearchDispatcher = (): ((query: SearchParams) => Promise<v
 
     setSearchParams(query);
 
-    if (query.page && state.pages[query.page]) {
-      return;
-    }
-
     const result = await search({ page: 1, ...query });
     if (!result) {
       return;
     }
 
+    setSearchResultCount(result.meta.numResults);
     putPages({ [result.meta.page]: result.artists });
     setMaxPages(result.meta.pageCount);
   };
@@ -51,6 +59,10 @@ export const useSubmitSearchDispatcher = (): ((query: SearchParams) => Promise<v
 reducers.push((state: State, a: Action): State => {
   if (isAction<SetSearchParametersAction>(a, 'SET_SEARCH_PARAMS')) {
     return { ...state, searchText: a.searchText };
+  }
+
+  if (isAction<SetResultCountAction>(a, 'SET_SEARCH_RESULT_COUNT')) {
+    return { ...state, resultCount: a.resultCount };
   }
 
   return state;

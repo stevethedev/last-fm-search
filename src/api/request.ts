@@ -22,8 +22,6 @@ export const httpGet = async (params: ApiParameters): Promise<unknown | null> =>
     ...params,
     api_key: API_KEY,
     format: 'json',
-    limit: `${params.limit ?? 10}`,
-    page: `${params.page ?? 1}`,
   };
 
   const response = await axios.get(`${API_URL}?${joinToString(parameters)}`, { responseType: 'json' });

@@ -90,9 +90,14 @@ const parseResults = (results: RawResults): Results => ({
  * Execute an anonymous search against the API
  */
 export async function search(params: SearchParams): Promise<Results | null> {
+  const limit = params.limit ? { limit: `${params.limit}` } : void 0;
+  const page = params.page ? { page: `${params.page}` } : void 0;
+
   const data = await httpGet({
     method: 'artist.search',
     artist: params.artist,
+    ...limit,
+    ...page,
   });
 
   // Normally I'd do a better job of type-checking this.

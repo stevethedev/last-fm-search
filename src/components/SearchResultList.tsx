@@ -20,13 +20,20 @@ const SearchResultListItem = ({ artist, onPageSelected, ...rest }: ItemParams): 
     onClick={() => onPageSelected(artist)}
     onKeyPress={(event) => (event.key === 'Enter' ? onPageSelected(artist) : null)}
   >
-    {artist.name}
+    <img src={artist.images.small ?? ''} alt={artist.name} />
+    <span className={styles['search-result-item__text']}>{artist.name}</span>
   </div>
 );
 
 export const SearchResultList = ({ page, onPageSelected, ...rest }: Params): JSX.Element => {
   const items = page.map((artist) => (
-    <SearchResultListItem className={styles['search-result-list__item']} artist={artist} key={artist.url} onPageSelected={onPageSelected} />));
+    <SearchResultListItem
+      className={styles['search-result-list__item']}
+      artist={artist}
+      key={artist.url}
+      onPageSelected={onPageSelected}
+    />
+  ));
 
   return (
     <section className={`${styles['search-result-list']} ${rest.className ?? ''}`}>
